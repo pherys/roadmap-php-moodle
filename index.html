@@ -1,0 +1,262 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Roadmap PHP para Moodle</title>
+<meta name="description" content="Trilha de estudos de PHP 8 puro até o desenvolvimento de plugins Moodle: fundamentos, segurança, SQL, POO, testes e as APIs do Moodle.">
+<style>
+:root{
+  --bg:#f7f6f2; --surface:#ffffff; --text:#1d1d1f; --muted:#55555c; --line:#dcd9cf;
+  --accent:#2f5d8a; --accent-soft:#e3ecf5; --done:#2e7d4f; --done-soft:#e2f2e8;
+  --e:#b3261e; --e-soft:#fbe9e7; --i:#8a5a00; --i-soft:#fdf1d8; --o:#55555c; --o-soft:#eeeeee;
+  --code:#f0eee8;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#1b1d21; --surface:#24272c; --text:#ecebe7; --muted:#b0afa9; --line:#3a3d44;
+    --accent:#8fb8e3; --accent-soft:#2a3746; --done:#7fd3a0; --done-soft:#21362a;
+    --e:#ff9c92; --e-soft:#3d2523; --i:#f2c46d; --i-soft:#3a3020; --o:#c4c3bd; --o-soft:#33363c;
+    --code:#30333a;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#1b1d21; --surface:#24272c; --text:#ecebe7; --muted:#b0afa9; --line:#3a3d44;
+  --accent:#8fb8e3; --accent-soft:#2a3746; --done:#7fd3a0; --done-soft:#21362a;
+  --e:#ff9c92; --e-soft:#3d2523; --i:#f2c46d; --i-soft:#3a3020; --o:#c4c3bd; --o-soft:#33363c;
+  --code:#30333a;
+}
+*{box-sizing:border-box}
+html{font-size:17px}
+body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;line-height:1.55}
+a{color:var(--accent)}
+code{background:var(--code);padding:.08em .35em;border-radius:4px;font-size:.88em;font-family:ui-monospace,Consolas,monospace;overflow-wrap:anywhere}
+.wrap{max-width:960px;margin:0 auto;padding:0 16px}
+header{padding:48px 0 24px}
+h1{font-size:2.1rem;line-height:1.2;margin:0 0 12px}
+.lead{font-size:1.1rem;color:var(--muted);max-width:44em;margin:0}
+.toolbar{position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:1px solid var(--line);padding:12px 0}
+.toolbar .wrap{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+.progress{flex:1 1 220px;display:flex;align-items:center;gap:10px}
+.bar{flex:1;height:10px;background:var(--line);border-radius:99px;overflow:hidden}
+.bar span{display:block;height:100%;width:0;background:var(--done);transition:width .3s}
+.count{font-variant-numeric:tabular-nums;font-size:.9rem;color:var(--muted);white-space:nowrap}
+.filters{display:flex;flex-wrap:wrap;gap:6px}
+button{font:inherit;font-size:.88rem;border:1px solid var(--line);background:var(--surface);color:var(--text);border-radius:99px;padding:6px 14px;cursor:pointer}
+button[aria-pressed="true"]{background:var(--text);color:var(--bg);border-color:var(--text)}
+button:focus-visible,summary:focus-visible,input:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.langs{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:20px}
+.legend{display:flex;flex-wrap:wrap;gap:16px;margin:20px 0 0;padding:0;list-style:none;font-size:.9rem;color:var(--muted)}
+.stage{position:relative;padding:8px 0 24px 56px}
+.stage::before{content:"";position:absolute;left:19px;top:0;bottom:0;width:2px;background:var(--line)}
+.stage:last-of-type::before{bottom:auto;height:40px}
+.num{position:absolute;left:0;top:8px;width:40px;height:40px;border-radius:50%;background:var(--accent);color:var(--bg);display:grid;place-items:center;font-weight:700}
+.stage.complete .num{background:var(--done)}
+h2{font-size:1.4rem;margin:12px 0 4px}
+.stage > p{margin:0 0 14px;color:var(--muted)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px}
+details{background:var(--surface);border:1px solid var(--line);border-radius:10px}
+details[open]{grid-column:1/-1}
+details.done{background:var(--done-soft);border-color:var(--done)}
+summary{list-style:none;display:flex;gap:10px;align-items:flex-start;padding:12px 14px;cursor:pointer}
+summary::-webkit-details-marker{display:none}
+summary input{width:20px;height:20px;margin:2px 0 0;flex:none;accent-color:var(--done);cursor:pointer}
+summary .tt{flex:1;font-weight:600}
+details.done .tt{text-decoration:line-through;text-decoration-color:var(--done)}
+.tag{flex:none;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em;padding:2px 8px;border-radius:99px;margin-top:2px}
+.tag.e{color:var(--e);background:var(--e-soft)} .tag.i{color:var(--i);background:var(--i-soft)} .tag.o{color:var(--o);background:var(--o-soft)}
+.body{padding:0 14px 14px 44px}
+.body p{margin:0 0 10px}
+.moodle{background:var(--accent-soft);border-left:4px solid var(--accent);padding:10px 12px;border-radius:0 8px 8px 0}
+.moodle strong{display:block;font-size:.8rem;text-transform:uppercase;letter-spacing:.05em;color:var(--accent);margin-bottom:2px}
+.links{margin:8px 0 0;padding-left:1.2em}
+.stage-links{margin:12px 0 0;font-size:.92rem}
+.hidden{display:none}
+footer{border-top:1px solid var(--line);margin-top:24px;padding:24px 0 48px;color:var(--muted);font-size:.92rem}
+@media (max-width:600px){
+  html{font-size:16px} h1{font-size:1.7rem}
+  .stage{padding-left:0} .stage::before{display:none}
+  .num{position:static;margin-bottom:4px;width:34px;height:34px}
+  .body{padding-left:14px}
+}
+</style>
+</head>
+<body>
+<header class="wrap">
+  <nav class="langs" role="group" aria-label="Idioma / Language / Idioma">
+    <button data-lang="pt" lang="pt-BR">Português</button>
+    <button data-lang="en" lang="en">English</button>
+    <button data-lang="es" lang="es">Español</button>
+  </nav>
+  <h1 data-i="titulo"></h1>
+  <p class="lead" data-i="lead"></p>
+  <ul class="legend">
+    <li><span class="tag e" data-i="e"></span> <span data-i="le"></span></li>
+    <li><span class="tag i" data-i="i"></span> <span data-i="li"></span></li>
+    <li><span class="tag o" data-i="o"></span> <span data-i="lo"></span></li>
+  </ul>
+</header>
+
+<div class="toolbar">
+  <div class="wrap">
+    <div class="progress">
+      <div class="bar" role="progressbar" aria-valuemin="0" aria-valuemax="100"><span id="barfill"></span></div>
+      <span class="count" id="count"></span>
+    </div>
+    <div class="filters" role="group" id="filters">
+      <button data-f="all" aria-pressed="true" data-i="fall"></button>
+      <button data-f="e" aria-pressed="false" data-i="fe"></button>
+      <button data-f="pend" aria-pressed="false" data-i="fpend"></button>
+      <button id="toggleall"></button>
+    </div>
+  </div>
+</div>
+
+<main class="wrap" id="roadmap"></main>
+
+<footer class="wrap">
+  <p data-i="rodape"></p>
+</footer>
+
+<script src="data.pt.js"></script>
+<script src="data.en.js"></script>
+<script src="data.es.js"></script>
+<script>
+(function(){
+  var KEY = "roadmap-php-moodle:feitos", LKEY = "roadmap-php-moodle:lang";
+  var REPO = "https://github.com/pherys/roadmap-php-moodle";
+  var UI = {
+    pt: { titulo:"Roadmap PHP para Moodle", doc:"Roadmap PHP para Moodle",
+      desc:"Trilha de estudos de PHP 8 puro até o desenvolvimento de plugins Moodle: fundamentos, segurança, SQL, POO, testes e as APIs do Moodle.",
+      lead:"Do PHP 8 puro, sem framework, até o seu primeiro plugin Moodle. Cada tópico mostra também <strong>como aquilo aparece no Moodle</strong>, para você saber por que está estudando.",
+      e:"Essencial", i:"Importante", o:"Opcional", le:"estude antes de seguir", li:"estude logo depois", lo:"quando precisar",
+      fall:"Todos", fe:"Essenciais", fpend:"Pendentes", abrir:"Abrir todos", fechar:"Fechar todos",
+      progresso:"Progresso", filtro:"Filtrar", de:"de", nomoodle:"No Moodle", refs:"Referências da etapa:", marcar:"Marcar como estudado:",
+      rodape:"Seu progresso fica salvo só neste navegador. Conteúdo aberto sob licença <a href=\"https://creativecommons.org/licenses/by-sa/4.0/deed.pt-br\">CC BY-SA 4.0</a>. Sugestões e correções são bem-vindas pelo <a href=\""+REPO+"\">repositório no GitHub</a>." },
+    en: { titulo:"PHP to Moodle Roadmap", doc:"PHP to Moodle Roadmap",
+      desc:"A learning path from plain PHP 8 to Moodle plugin development: fundamentals, security, SQL, OOP, testing and the Moodle APIs.",
+      lead:"From plain PHP 8, with no framework, to your first Moodle plugin. Every topic also shows <strong>how it shows up in Moodle</strong>, so you know why you are learning it.",
+      e:"Essential", i:"Important", o:"Optional", le:"learn before moving on", li:"learn right after", lo:"when you need it",
+      fall:"All", fe:"Essentials", fpend:"Pending", abrir:"Expand all", fechar:"Collapse all",
+      progresso:"Progress", filtro:"Filter", de:"of", nomoodle:"In Moodle", refs:"References for this stage:", marcar:"Mark as learned:",
+      rodape:"Your progress is saved only in this browser. Content licensed under <a href=\"https://creativecommons.org/licenses/by-sa/4.0/deed.en\">CC BY-SA 4.0</a>. Suggestions and fixes are welcome in the <a href=\""+REPO+"\">GitHub repository</a>." },
+    es: { titulo:"Hoja de ruta de PHP a Moodle", doc:"Hoja de ruta PHP a Moodle",
+      desc:"Ruta de aprendizaje desde PHP 8 puro hasta el desarrollo de plugins Moodle: fundamentos, seguridad, SQL, POO, pruebas y las APIs de Moodle.",
+      lead:"Desde PHP 8 puro, sin framework, hasta tu primer plugin de Moodle. Cada tema muestra también <strong>cómo aparece en Moodle</strong>, para que sepas por qué lo estudias.",
+      e:"Esencial", i:"Importante", o:"Opcional", le:"estúdialo antes de seguir", li:"estúdialo justo después", lo:"cuando lo necesites",
+      fall:"Todos", fe:"Esenciales", fpend:"Pendientes", abrir:"Abrir todos", fechar:"Cerrar todos",
+      progresso:"Progreso", filtro:"Filtrar", de:"de", nomoodle:"En Moodle", refs:"Referencias de esta etapa:", marcar:"Marcar como estudiado:",
+      rodape:"Tu progreso se guarda solo en este navegador. Contenido con licencia <a href=\"https://creativecommons.org/licenses/by-sa/4.0/deed.es\">CC BY-SA 4.0</a>. Las sugerencias y correcciones son bienvenidas en el <a href=\""+REPO+"\">repositorio de GitHub</a>." }
+  };
+  var HTMLLANG = {pt:"pt-BR", en:"en", es:"es"};
+
+  function escolherIdioma(){
+    var q = new URLSearchParams(location.search).get("lang");
+    if (q && UI[q]) return q;
+    try { var s = localStorage.getItem(LKEY); if (s && UI[s]) return s; } catch(e) {}
+    var nav = (navigator.languages || [navigator.language || "pt"]);
+    for (var k = 0; k < nav.length; k++) { var c = String(nav[k]).slice(0,2).toLowerCase(); if (UI[c]) return c; }
+    return "en";
+  }
+  var lang = escolherIdioma(), T = UI[lang];
+  var feitos = {};
+  try { feitos = JSON.parse(localStorage.getItem(KEY)) || {}; } catch(e) {}
+  function salvar(){ try { localStorage.setItem(KEY, JSON.stringify(feitos)); } catch(e) {} }
+
+  function esc(s){ return String(s).replace(/[&<>"']/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]; }); }
+  function fmt(s){ return esc(s).replace(/`([^`]+)`/g, "<code>$1</code>"); }
+  function links(arr){
+    if(!arr || !arr.length) return "";
+    return '<ul class="links">' + arr.map(function(l){ return '<li><a href="'+esc(l[1])+'" target="_blank" rel="noopener">'+esc(l[0])+'</a></li>'; }).join("") + "</ul>";
+  }
+
+  var root = document.getElementById("roadmap");
+  var all = [], filtro = "all", aberto = false;
+
+  function render(){
+    T = UI[lang];
+    document.documentElement.lang = HTMLLANG[lang];
+    document.title = T.doc;
+    document.querySelector('meta[name="description"]').content = T.desc;
+    document.querySelectorAll("[data-i]").forEach(function(el){ el.innerHTML = T[el.dataset.i]; });
+    document.querySelector(".bar").setAttribute("aria-label", T.progresso);
+    document.getElementById("filters").setAttribute("aria-label", T.filtro);
+    document.getElementById("toggleall").textContent = aberto ? T.fechar : T.abrir;
+    document.querySelectorAll("[data-lang]").forEach(function(b){ b.setAttribute("aria-pressed", b.dataset.lang === lang); });
+
+    root.innerHTML = ROADMAP_DATA[lang].map(function(st, i){
+      var cards = st.topicos.map(function(tp){
+        var id = st.id + "/" + tp.id;
+        return '<details data-id="'+id+'" data-n="'+tp.n+'"'+(feitos[id]?' class="done"':'')+(aberto?' open':'')+'>' +
+          '<summary><input type="checkbox" aria-label="'+esc(T.marcar+" "+tp.t)+'"'+(feitos[id]?" checked":"")+'>' +
+          '<span class="tt">'+esc(tp.t)+'</span><span class="tag '+tp.n+'">'+T[tp.n]+'</span></summary>' +
+          '<div class="body"><p>'+fmt(tp.d)+'</p>' +
+          (tp.m ? '<p class="moodle"><strong>'+T.nomoodle+'</strong>'+fmt(tp.m)+'</p>' : '') +
+          links(tp.l) + '</div></details>';
+      }).join("");
+      return '<section class="stage" id="'+st.id+'"><div class="num">'+(i+1)+'</div>' +
+        '<h2>'+esc(st.titulo)+'</h2><p>'+esc(st.resumo)+'</p><div class="grid">'+cards+'</div>' +
+        (st.links ? '<div class="stage-links"><strong>'+T.refs+'</strong>'+links(st.links)+'</div>' : '') +
+        '</section>';
+    }).join("");
+    all = root.querySelectorAll("details");
+    atualizar(); aplicarFiltro();
+  }
+
+  document.querySelectorAll("[data-lang]").forEach(function(b){
+    b.addEventListener("click", function(){
+      lang = b.dataset.lang;
+      try { localStorage.setItem(LKEY, lang); } catch(e) {}
+      try { var u = new URL(location.href); u.searchParams.set("lang", lang); history.replaceState(null, "", u); } catch(e) {}
+      render();
+    });
+  });
+
+  function atualizar(){
+    var n = 0;
+    all.forEach(function(d){ if(feitos[d.dataset.id]) n++; });
+    var pct = Math.round(n / all.length * 100);
+    document.getElementById("barfill").style.width = pct + "%";
+    document.querySelector(".bar").setAttribute("aria-valuenow", pct);
+    document.getElementById("count").textContent = n + " " + T.de + " " + all.length + " (" + pct + "%)";
+    root.querySelectorAll(".stage").forEach(function(s){
+      s.classList.toggle("complete", !s.querySelector("details:not(.done)"));
+    });
+  }
+  root.addEventListener("click", function(ev){
+    if(ev.target.matches("summary input")) ev.stopPropagation();
+  });
+  root.addEventListener("change", function(ev){
+    if(!ev.target.matches("summary input")) return;
+    var d = ev.target.closest("details");
+    if(ev.target.checked) feitos[d.dataset.id] = 1; else delete feitos[d.dataset.id];
+    d.classList.toggle("done", ev.target.checked);
+    salvar(); atualizar(); aplicarFiltro();
+  });
+
+  function aplicarFiltro(){
+    all.forEach(function(d){
+      var ok = filtro === "all" || (filtro === "e" && d.dataset.n === "e") || (filtro === "pend" && !feitos[d.dataset.id]);
+      d.classList.toggle("hidden", !ok);
+    });
+    root.querySelectorAll(".stage").forEach(function(s){
+      s.classList.toggle("hidden", !s.querySelector("details:not(.hidden)"));
+    });
+  }
+  document.querySelectorAll("[data-f]").forEach(function(b){
+    b.addEventListener("click", function(){
+      filtro = b.dataset.f;
+      document.querySelectorAll("[data-f]").forEach(function(x){ x.setAttribute("aria-pressed", x === b); });
+      aplicarFiltro();
+    });
+  });
+  document.getElementById("toggleall").addEventListener("click", function(){
+    aberto = !aberto;
+    all.forEach(function(d){ d.open = aberto; });
+    this.textContent = aberto ? T.fechar : T.abrir;
+  });
+  render();
+})();
+</script>
+</body>
+</html>
