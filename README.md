@@ -8,6 +8,8 @@ Os roadmaps de PHP que já existem levam a Laravel ou Symfony. O Moodle não usa
 
 **Versão interativa (marque seu progresso):** https://pherys.github.io/roadmap-php-moodle/
 
+**Também no roadmap.sh (em inglês):** https://roadmap.sh/r/6b01bafef666a02b51124565
+
 ## Visão geral
 
 ```mermaid

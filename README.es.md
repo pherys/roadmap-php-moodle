@@ -8,6 +8,8 @@ Las hojas de ruta de PHP que existen llevan a Laravel o Symfony. Moodle no usa n
 
 **Versión interactiva (marca tu progreso):** https://pherys.github.io/roadmap-php-moodle/?lang=es
 
+**También en roadmap.sh (en inglés):** https://roadmap.sh/r/6b01bafef666a02b51124565
+
 ## Vista general
 
 ```mermaid
